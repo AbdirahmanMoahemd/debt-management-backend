@@ -7,8 +7,9 @@ const DatabaseConection = async () => {
     console.log(`Connected to database ${conn.connection.name}`);
   } catch (e) {
     console.log(e);
+    process.exit(1)
   }
 };
 
 
-export default DatabaseConection
+export default DatabaseConection 
