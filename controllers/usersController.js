@@ -41,27 +41,30 @@ export const registerUser = asyncHandler(async (req, res) => {
     if (userExists) {
       res.status(400).json({ message: "User already exists" });
     }
-
-    const user = await User.create({
-      name,
-      email,
-      password,
-      phone,
-      city,
-      country,
-    });
-    if (user) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        phone: user.phone,
-        city: user.city,
-        country: user.country,
-        token: generateToken(user._id),
+    else{
+      const user = await User.create({
+        name,
+        email,
+        password,
+        phone,
+        city,
+        country,
       });
+      if (user) {
+        res.json({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          isAdmin: user.isAdmin,
+          phone: user.phone,
+          city: user.city,
+          country: user.country,
+          token: generateToken(user._id),
+        });
+      }
     }
+
+   
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
