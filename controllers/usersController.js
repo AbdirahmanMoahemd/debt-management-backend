@@ -40,8 +40,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
     if (userExists) {
       res.status(400).json({ message: "User already exists" });
-    }
-    else{
+    } else {
       const user = await User.create({
         name,
         email,
@@ -63,8 +62,6 @@ export const registerUser = asyncHandler(async (req, res) => {
         });
       }
     }
-
-   
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -172,7 +169,15 @@ export const updateUserPasswordApp = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 export const getUsers = asyncHandler(async (req, res) => {
   try {
-    const users = await User.find({});
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+    const users = await User.find({ ...keyword }).sort({ createdAt: -1 });
     res.json(users);
   } catch (e) {
     res.status(500).json({ error: e.message });

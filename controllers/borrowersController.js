@@ -2,7 +2,17 @@ import Customers from "../models/borrowersModel.js";
 
 export const getCustomers = async (req, res) => {
   try {
-    const customers = await Customers.find();
+    const keyword = req.query.keyword
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
+      : {};
+    const customers = await Customers.find({ ...keyword }).sort({
+      createdAt: -1,
+    });
     res.json(customers);
   } catch (e) {
     res.status(500).json({ error: e.message });
