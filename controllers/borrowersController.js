@@ -79,10 +79,10 @@ export const updateCustomer = async (req, res) => {
 
 export const deleteCustomers = async (req, res) => {
   try {
-    const customers = await Customers.findById(req.params.id);
+    const customer = await Customers.findByIdAndDelete(req.params.id);
 
-    if (customers) {
-      await customers.remove();
+    if (customer) {
+      // await customer.remove();
       res.json({ message: "customer deleted" });
     } else {
       res.status(404).json({ message: "Customer Not Found" });

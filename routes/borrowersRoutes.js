@@ -16,7 +16,7 @@ router
 router
   .route("/:id")
   .put(protect, admin, updateCustomer)
-  .delete(protect, admin, deleteCustomers);
+  .delete(deleteCustomers);
 router.route("/count").get(protect, admin, getCustomersCount);
 
 export default router;
