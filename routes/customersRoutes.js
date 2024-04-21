@@ -6,17 +6,17 @@ import {
   updateCustomer,
   getCustomersCount,
   deleteCustomers,
-} from "../controllers/borrowersController.js";
+} from "../controllers/customersController.js";
 import { admin, protect } from "../middlewares/authMiddleware.js";
 
 router
   .route("/")
-  .post(protect, admin, registerCustomer)
-  .get(protect, admin, getCustomers);
+  .post(protect, registerCustomer)
+  .get(protect, getCustomers);
 router
   .route("/:id")
-  .put(protect, admin, updateCustomer)
+  .put(protect, updateCustomer)
   .delete(protect, admin, deleteCustomers);
-router.route("/count").get(protect, admin, getCustomersCount);
+router.route("/count").get(protect, getCustomersCount);
 
 export default router;

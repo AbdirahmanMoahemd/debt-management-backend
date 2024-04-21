@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import DatabaseConection from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
-import borrowersRoutes from "./routes/borrowersRoutes.js";
+import borrowersRoutes from "./routes/customersRoutes.js";
 
 dotenv.config();
 const app = express();

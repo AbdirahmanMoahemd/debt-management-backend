@@ -1,4 +1,4 @@
-import Customers from "../models/borrowersModel.js";
+import Customers from "../models/cutomersModel.js";
 
 export const getCustomers = async (req, res) => {
   try {
@@ -36,15 +36,15 @@ export const getCustomersCount = async (req, res) => {
 
 export const registerCustomer = async (req, res) => {
   try {
-    const { name, email, phone, address, city, country } = req.body;
+    const { name, email, phone, address, borrowedItems,isActive  } = req.body;
 
     const customer = await Customers.create({
       name,
       email,
       phone,
       address,
-      city,
-      country,
+      borrowedItems,
+      isActive,
     });
     if (customer) {
       res.json(customer);
@@ -63,8 +63,8 @@ export const updateCustomer = async (req, res) => {
       customer.email = req.body.email || customer.email;
       customer.phone = req.body.phone || customer.phone;
       customer.address = req.body.address || customer.address;
-      customer.city = req.body.city || customer.city;
-      customer.country = req.body.country || customer.country;
+      customer.borrowedItems = req.body.borrowedItems || customer.borrowedItems;
+      customer.isActive = req.body.isActive || customer.isActive;
 
       const updatedUser = await customer.save();
 
