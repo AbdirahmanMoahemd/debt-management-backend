@@ -115,7 +115,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
       const updatedUser = await user.save();
 
-      res.json({
+      res.status(200).json({
         _id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
@@ -137,7 +137,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
 // @desc    Update user password
 // @route   PUT /api/users/password
 // @access  Private
-export const updateUserPasswordApp = asyncHandler(async (req, res) => {
+export const updateUserPassword = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -156,6 +156,25 @@ export const updateUserPasswordApp = asyncHandler(async (req, res) => {
         country: updatedUser.country,
         token: updatedUser.token,
       });
+    } else {
+      res.status(404).json({ message: "User Not Found" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
+export const updateUserRole = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (user) {
+      user.isAdmin = req.body.isAdmin;
+
+      const updatedUser = await user.save();
+
+      res.json(updatedUser);
     } else {
       res.status(404).json({ message: "User Not Found" });
     }
