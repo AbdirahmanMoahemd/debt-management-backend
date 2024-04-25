@@ -1,6 +1,6 @@
 import Customers from "../models/cutomersModel.js";
 
-export const getCustomers = async (req, res) => {
+export const getBorrowers = async (req, res) => {
   try {
     const keyword = req.query.keyword
       ? {
@@ -19,7 +19,24 @@ export const getCustomers = async (req, res) => {
   }
 };
 
-export const getCustomersCount = async (req, res) => {
+
+export const getRecentBorrowers = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const customers = await Customers.find({createdAt: { $gte: today }}).sort({
+      createdAt: -1
+    });
+
+    
+    res.json(customers);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+export const getBorrowersCount = async (req, res) => {
   try {
     const customers = await Customers.find();
 
@@ -34,7 +51,7 @@ export const getCustomersCount = async (req, res) => {
   }
 };
 
-export const registerCustomer = async (req, res) => {
+export const registerBorrower = async (req, res) => {
   try {
     const { name, email, phone, address, borrowedItems,isActive  } = req.body;
 
@@ -54,7 +71,7 @@ export const registerCustomer = async (req, res) => {
   }
 };
 
-export const updateCustomer = async (req, res) => {
+export const updateBorrower = async (req, res) => {
   try {
     const customer = await Customers.findById(req.params.id);
 
@@ -77,7 +94,7 @@ export const updateCustomer = async (req, res) => {
   }
 };
 
-export const deleteCustomers = async (req, res) => {
+export const deleteBorrower = async (req, res) => {
   try {
     const customer = await Customers.findByIdAndDelete(req.params.id);
 

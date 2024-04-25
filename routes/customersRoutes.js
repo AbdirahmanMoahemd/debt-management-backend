@@ -1,22 +1,24 @@
 import express from "express";
 const router = express.Router();
 import {
-  registerCustomer,
-  getCustomers,
-  updateCustomer,
-  getCustomersCount,
-  deleteCustomers,
+  registerBorrower,
+  getBorrowers,
+  updateBorrower,
+  getBorrowersCount,
+  deleteBorrower,
+  getRecentBorrowers,
 } from "../controllers/customersController.js";
 import { admin, protect } from "../middlewares/authMiddleware.js";
 
 router
   .route("/")
-  .post(protect, registerCustomer)
-  .get(protect, getCustomers);
+  .post(protect, registerBorrower)
+  .get(protect, getBorrowers);
 router
   .route("/:id")
-  .put(protect, updateCustomer)
-  .delete(protect, admin, deleteCustomers);
-router.route("/count").get(protect, getCustomersCount);
+  .put(protect, updateBorrower)
+  .delete(protect, admin, deleteBorrower);
+router.route("/count").get(protect, getBorrowersCount);
+router.route('/recent').get(getRecentBorrowers)
 
 export default router;
