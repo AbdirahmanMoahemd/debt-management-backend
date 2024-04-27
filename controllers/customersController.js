@@ -49,8 +49,11 @@ export const getCounts = async (req, res) => {
 
     let activeBorrowerCounter = 0;
     for (let i = 0; i < customers.length; i++) {
-      if (customers[i].isActive) {
-        activeBorrowerCounter++;
+      if (!customers[i].isActive) {
+        for (let index = 0; index < customers[i].borrowedItems.length; index++) {
+          activeBorrowerCounter = activeBorrowerCounter + customers[i].borrowedItems[index].value
+  
+        }
       }
 
     }
