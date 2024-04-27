@@ -18,7 +18,7 @@ router
   .route("/:id")
   .put(protect, updateBorrower)
   .delete(protect, admin, deleteBorrower);
-router.route("/count").get(getCounts);
-router.route('/recent').get(getRecentBorrowers)
+router.route("/count").get(protect, getCounts);
+router.route('/recent').get(protect, getRecentBorrowers)
 
 export default router;
