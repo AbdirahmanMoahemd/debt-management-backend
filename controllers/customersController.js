@@ -1,14 +1,15 @@
 import Customers from "../models/cutomersModel.js";
+import User from "../models/userModel.js";
 
 export const getBorrowers = async (req, res) => {
   try {
     const keyword = req.query.keyword
       ? {
-          name: {
-            $regex: req.query.keyword,
-            $options: "i",
-          },
-        }
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
       : {};
     const customers = await Customers.find({ ...keyword }).sort({
       createdAt: -1,
@@ -25,27 +26,49 @@ export const getRecentBorrowers = async (req, res) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const customers = await Customers.find({createdAt: { $gte: today }}).sort({
+    const customers = await Customers.find({ createdAt: { $gte: today } }).sort({
       createdAt: -1
     });
 
-    
+
     res.json(customers);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 };
 
-export const getBorrowersCount = async (req, res) => {
+export const getCounts = async (req, res) => {
   try {
     const customers = await Customers.find();
+    const users = await User.find();
 
-    let counter = 0;
+    let borrowerCounter = 0;
     for (let i = 0; i < customers.length; i++) {
-      counter++;
+      borrowerCounter++;
     }
 
-    res.json({ counter });
+    let activeBorrowerCounter = 0;
+    for (let i = 0; i < customers.length; i++) {
+      if (customers[i].isActive) {
+        activeBorrowerCounter++;
+      }
+
+    }
+
+    let borrowerCounterByValue = 0;
+    for (let i = 0; i < customers.length; i++) {
+      for (let index = 0; index < customers[i].borrowedItems.length; index++) {
+        borrowerCounterByValue = borrowerCounterByValue + customers[i].borrowedItems[index].value
+
+      }
+    }
+
+    let usersCounter = 0;
+    for (let i = 0; i < users.length; i++) {
+      usersCounter++;
+    }
+
+    res.json({ borrowerCounter, borrowerCounterByValue, activeBorrowerCounter, usersCounter });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -53,7 +76,7 @@ export const getBorrowersCount = async (req, res) => {
 
 export const registerBorrower = async (req, res) => {
   try {
-    const { name, email, phone, address, borrowedItems,isActive  } = req.body;
+    const { name, email, phone, address, borrowedItems, isActive } = req.body;
 
     const customer = await Customers.create({
       name,
@@ -82,6 +105,27 @@ export const updateBorrower = async (req, res) => {
       customer.address = req.body.address || customer.address;
       customer.borrowedItems = req.body.borrowedItems || customer.borrowedItems;
       customer.isActive = req.body.isActive || customer.isActive;
+
+      const updatedUser = await customer.save();
+
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ message: "Customer Not Found" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
+
+
+export const updateBorrowerItem = async (req, res) => {
+  try {
+
+    const borrowedItems = req.body
+    const customer = await Customers.findById(req.params.id);
+
+    if (customer) {
+
 
       const updatedUser = await customer.save();
 

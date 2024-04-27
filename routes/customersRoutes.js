@@ -4,7 +4,7 @@ import {
   registerBorrower,
   getBorrowers,
   updateBorrower,
-  getBorrowersCount,
+  getCounts,
   deleteBorrower,
   getRecentBorrowers,
 } from "../controllers/customersController.js";
@@ -18,7 +18,7 @@ router
   .route("/:id")
   .put(protect, updateBorrower)
   .delete(protect, admin, deleteBorrower);
-router.route("/count").get(protect, getBorrowersCount);
+router.route("/count").get(getCounts);
 router.route('/recent').get(getRecentBorrowers)
 
 export default router;
