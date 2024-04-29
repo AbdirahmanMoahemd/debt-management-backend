@@ -104,7 +104,6 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
     if (user) {
       user.name = req.body.name || user.name;
-      user.email = req.body.email || user.email;
       user.phone = req.body.phone || user.phone;
       user.city = req.body.city || user.city;
       user.country = req.body.country || user.country;
