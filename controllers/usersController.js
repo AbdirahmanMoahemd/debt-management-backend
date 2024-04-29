@@ -221,10 +221,9 @@ export const getUsersCount = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 export const deleteUser = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndDelete(req.params.id);
 
     if (user) {
-      await user.remove();
       res.json({ message: "User removed" });
     } else {
       res.status(404);
